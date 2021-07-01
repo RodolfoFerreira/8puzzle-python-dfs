@@ -2,15 +2,15 @@ from copy import deepcopy
 import numpy as np
 
 initState=np.array([
-            [6,2,8],
-            [3,0,5],
-            [1,4,7]
+            [1,2,3],
+            [8,0,4],
+            [7,6,5]
         ])
 
 goalState=np.array([
-            [3,6,8],
-            [1,0,5],
-            [4,2,7]
+            [2,8,1],
+            [0,4,3],
+            [7,6,5]
         ])
 
 fringe = []
@@ -129,7 +129,9 @@ while(len(fringe) > 0):
     print("-"*5 + "ITERAÇÃO: %d" %i)
     print("-"*5 + "FRINGE: %d" %len(fringe))
     print("-"*5 + "EXPANDED: %d" %len(expandedStates))
-    
+    print("-"*5 + "MOVIMENTOS: %d" %len(visited))
+    print("-"*20)
+
     state = deepcopy(fringe[0])
     visited.append(state)
 
