@@ -1,3 +1,7 @@
+# MBA Data Sciente & Machine Learning - Unip Ribeirão Pretp
+# Resolução 8-Puzzle com busca cega
+# Aluno: Rodolfo Guimarães Ferreira
+
 from copy import deepcopy
 import numpy as np
 
@@ -121,41 +125,21 @@ def expandPuzzle(puzzleState):
 def arreq_in_list(myarr, list_arrays):
     return next((True for elem in list_arrays if np.array_equal(elem, myarr)), False)
 
-def getInvCount(arr) :
-    inv_count = 0
-    for i in range(0, 2) :
-        for j in range(i + 1, 3) :
-           
-            # Value 0 is used for empty space
-            if (arr[j][i] > 0 and arr[j][i] > arr[i][j]) :
-                inv_count += 1
-    return inv_count
-     
-
-def isSolvable(puzzle) :
-    invCount = getInvCount(puzzle)
-   
-    return (invCount % 2 == 0)
-
 def verifReachable(initialArr, finalArr):
     inv = 0
     initial = list(initialArr.flatten())
     final = list(finalArr.flatten())
-    for posInit in range(0, 9): #vetor inicial
+    for posInit in range(0, 9):
         if (initial[posInit] != 0):
             posFinal = final.index(initial[posInit])
-            aux=[] #cria uma lista com todos os elementos que podem ocorrer antes do atual
+            aux=[]
             for x in range(0, posFinal):
                 if (final[x] != 0):
                     aux.append(final[x])
-            #print str(initial[posInit]) 
-            #print aux
             for i in range(posInit, 9):
                 for j in range(0, len(aux)):
                     if (initial[i] == aux[j]):
-                        #print "inversao"
-                        inv = inv + 1
-    #print inv		
+                        inv = inv + 1		
     if (inv % 2) == 0:	
         return True
     else:
