@@ -1,16 +1,20 @@
+# MBA Data Sciente & Machine Learning - Unip Ribeirão Pretp
+# Resolução 8-Puzzle com busca cega
+# Aluno: Rodolfo Guimarães Ferreira
+
 from copy import deepcopy
 import numpy as np
 
 initState=np.array([
-            [6,2,8],
-            [3,0,5],
-            [1,4,7]
+            [1,2,3],
+            [8,0,4],
+            [7,6,5]
         ])
 
 goalState=np.array([
-            [3,6,8],
-            [1,0,5],
-            [4,2,7]
+            [2,8,1],
+            [0,4,3],
+            [7,6,5]
         ])
 
 fringe = []
@@ -121,23 +125,60 @@ def expandPuzzle(puzzleState):
 def arreq_in_list(myarr, list_arrays):
     return next((True for elem in list_arrays if np.array_equal(elem, myarr)), False)
 
+def verifReachable(initialArr, finalArr):
+    inv = 0
+    initial = list(initialArr.flatten())
+    final = list(finalArr.flatten())
+    for posInit in range(0, 9):
+        if (initial[posInit] != 0):
+            posFinal = final.index(initial[posInit])
+            aux=[]
+            for x in range(0, posFinal):
+                if (final[x] != 0):
+                    aux.append(final[x])
+            for i in range(posInit, 9):
+                for j in range(0, len(aux)):
+                    if (initial[i] == aux[j]):
+                        inv = inv + 1		
+    if (inv % 2) == 0:	
+        return True
+    else:
+        return False
+
+def printMatrix(matrix):
+    s = [[str(e) for e in row] for row in matrix]
+    lens = [max(map(len, col)) for col in zip(*s)]
+    fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
+    table = ["|" + fmt.format(*row) + "|" for row in s]
+    print("\n".join(table))
+    
 i = 0
 fringe.append(initState)
 expandedStates.append(initState)
 
-while(len(fringe) > 0):
-    print("-"*5 + "ITERAÇÃO: %d" %i)
-    print("-"*5 + "FRINGE: %d" %len(fringe))
-    print("-"*5 + "EXPANDED: %d" %len(expandedStates))
-    
-    state = deepcopy(fringe[0])
-    visited.append(state)
+if(verifReachable(initState, goalState)):
+    print("-"*5 + "A combinação é solucionável" + "-"*5)
+    printMatrix(initState)
+    print("-"*5 + "PARA" + "-"*5)
+    printMatrix(goalState)
 
-    if (np.array_equal(state, goalState)):
-        print("Estado desejado encontrado em %d tentativa(s)" % i)
-        break
-    else:
-        expandPuzzle(state)
-        fringe.pop(0)
+    while(len(fringe) > 0):
+        print("-"*5 + "ITERAÇÃO: %d" %i)
+        print("-"*5 + "FRINGE: %d" %len(fringe))
+        print("-"*5 + "EXPANDED: %d" %len(expandedStates))
+        print("-"*5 + "MOVIMENTOS: %d" %len(visited))
+        print("-"*20)
 
-    i=i+1
+        state = deepcopy(fringe[0])
+        visited.append(state)
+
+        if (np.array_equal(state, goalState)):
+            print("Estado desejado encontrado em %d tentativa(s)" % i)
+            break
+        else:
+            expandPuzzle(state)
+            fringe.pop(0)
+
+        i=i+1
+else:
+    print("A combinação não é solucionável")
